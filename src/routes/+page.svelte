@@ -2,7 +2,7 @@
 	import CounterFrame from '$lib/components/counters/counterFrame.svelte';
 	import Menu from '$lib/components/menu.svelte';
 	import { Rule, ruleName } from '$lib/definitions/rules';
-	import { Button, Modal } from 'flowbite-svelte';
+	import { Button, Modal, Tooltip } from 'flowbite-svelte';
 	import { ArrowsRepeatSolid, GearSolid, PlusSolid } from 'flowbite-svelte-icons';
 
 	let keys: Array<number> = [1];
@@ -40,9 +40,10 @@
 
 <div class="container mx-auto">
 	<div class="flex justify-end align-middle gap-3 m-3">
-		<Button type="button" outline={true} color="dark" on:click={allReset}
+		<Button type="button" outline={true} color="dark" on:click={allReset} disabled
 			><ArrowsRepeatSolid />
 		</Button>
+		<Tooltip>Unavailable due to a bug</Tooltip>
 		<button type="button" on:click={() => (popupModal = true)}><GearSolid /></button>
 	</div>
 
