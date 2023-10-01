@@ -4,47 +4,27 @@
 		CheckCircleSolid,
 		CloseCircleSolid
 	} from 'flowbite-svelte-icons';
-	// import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let correct = 0;
 
 	export let incorrect = 0;
 
-	// let undoStack: Array<{ correct: number; worng: number }> = [];
+	const dispatch = createEventDispatcher();
 
-	// const dispatch = createEventDispatcher();
-
-	// function deleteClick() {
-	// 	dispatch('delete');
-	// }
+	const changeScore = () => {
+		dispatch('changed');
+	}
 
 	const onCorrect = () => {
-		// pushUndoStack();
+		changeScore();
 		correct++;
 	};
 
 	const onWorng = () => {
-		// pushUndoStack();
+		changeScore();
 		incorrect++;
 	};
-
-	// const undo = () => {
-	// 	const pop = undoStack.pop();
-	// 	if (pop) {
-	// 		correct = pop.correct;
-	// 		incorrect = pop.worng;
-	// 	}
-	// };
-
-	// export const reset = () => {
-	// 	correct = 0;
-	// 	incorrect = 0;
-	// 	undoStack = [];
-	// };
-
-	// function pushUndoStack() {
-	// 	undoStack.push({ correct: correct, worng: incorrect });
-	// }
 </script>
 
 <div class="grid justify-items-center grid-rows-2 grid-flow-col">

@@ -4,6 +4,7 @@
 		CheckCircleSolid,
 		CloseCircleSolid
 	} from 'flowbite-svelte-icons';
+	import { createEventDispatcher } from 'svelte';
 
 	export const id: string = crypto.randomUUID();
 
@@ -17,45 +18,23 @@
 
 	export let score: number = 0;
 
-	// let undoStack: Array<{ correct: number; worng: number; score: number }> = [];
+	const dispatch = createEventDispatcher();
 
-	// const dispatch = createEventDispatcher();
+	const changeScore = () => {
+		dispatch('changed');
+	}
 
 	const onCorrect = () => {
-		// pushUndoStack();
+		changeScore();
 		correct++;
 		score = score + whenCorrect;
 	};
 
 	const onWorng = () => {
-		// pushUndoStack();
+		changeScore();
 		incorrect++;
 		score = score + whenIncorrect;
 	};
-
-	// const undo = () => {
-	// 	const pop = undoStack.pop();
-	// 	if (pop) {
-	// 		correct = pop.correct;
-	// 		incorrect = pop.worng;
-	// 		score = pop.score;
-	// 	}
-	// };
-
-	// const reset = () => {
-	// 	score = 0;
-	// 	correct = 0;
-	// 	incorrect = 0;
-	// 	undoStack = [];
-	// };
-
-	// function pushUndoStack() {
-	// 	undoStack.push({ correct: correct, worng: incorrect, score: score });
-	// }
-
-	// function deleteClick() {
-	// 	dispatch('delete');
-	// }
 </script>
 
 <span class="flex justify-center"><p class="text-6xl text-black dark:text-white">{score}</p></span>

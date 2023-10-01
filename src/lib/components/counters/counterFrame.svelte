@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Rule } from '$lib/rules';
+	import { Rule } from '$lib/definitions/rules';
 	import { Button, Card, CloseButton } from 'flowbite-svelte';
 	import { ArrowsRepeatSolid, UndoOutline } from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
@@ -8,9 +8,18 @@
 
 	export let rule: Rule;
 
+	export let order: number;
+
 	export let whenCorrect: number;
 
 	export let whenIncorrect: number;
+
+	export const reset = () => {
+		score = 0;
+		correct = 0;
+		incorrect = 0;
+		undoStack = [];
+	};
 
 	let correct: number;
 
@@ -20,9 +29,9 @@
 
 	let undoStack: Array<{ correct: number; worng: number; score: number }> = [];
 
-	$: undoStack.push({ correct: correct, worng: incorrect, score: score });
-
-	const dispatch = createEventDispatcher();
+	const pushUndoStack = () =>{
+		undoStack.push({ correct: correct, worng: incorrect, score: score });
+	}
 
 	const undo = () => {
 		const pop = undoStack.pop();
@@ -33,16 +42,10 @@
 		}
 	};
 
-	const reset = () => {
-		score = 0;
-		correct = 0;
-		incorrect = 0;
-		undoStack = [];
-	};
+	const dispatch = createEventDispatcher();
 
-    
 	function deleteClick() {
-		dispatch('delete');
+		dispatch('delete', order);
 	}
 </script>
 
@@ -60,8 +63,8 @@
 	<input placeholder="Name?" class="text-xl m-2" />
 
     {#if rule === Rule.simple}
-        <SimpleCounter bind:correct bind:incorrect />
+        <SimpleCounter bind:correct bind:incorrect on:changed={pushUndoStack} />
     {:else if rule === Rule.mn}
-        <ScoreCounter {whenCorrect} {whenIncorrect} bind:correct bind:incorrect bind:score />
+        <ScoreCounter {whenCorrect} {whenIncorrect} bind:correct bind:incorrect bind:score on:changed={pushUndoStack} />
     {/if}
 </Card>

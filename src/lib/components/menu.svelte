@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Rule } from '$lib/rules';
+  import { Rule } from '$lib/definitions/rules';
   import { Accordion, AccordionItem, Button } from 'flowbite-svelte';
 
   export let rule: Rule;
