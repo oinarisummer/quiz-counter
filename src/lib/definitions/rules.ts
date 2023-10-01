@@ -19,12 +19,12 @@ export const ruleName = (rule: Rule): string => {
         case 2:
             return '+m/-n'
         case 3:
-            return 'n by n'
+            return 'n by m'
         case 4:
             return 'UpDown'
         case 5:
             return 'Swedish'
         case 6:
-            return 'Divide by'
+            return 'Divide by n'
     }
 }

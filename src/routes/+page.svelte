@@ -1,6 +1,7 @@
 <script lang="ts">
 	import CounterFrame from '$lib/components/counters/counterFrame.svelte';
 	import Menu from '$lib/components/menu.svelte';
+	import type { GameParameters, NbyMParameters } from '$lib/definitions/parameters';
 	import { Rule, ruleName } from '$lib/definitions/rules';
 	import { Button, Modal, Tooltip } from 'flowbite-svelte';
 	import { ArrowsRepeatSolid, GearSolid, PlusSolid } from 'flowbite-svelte-icons';
@@ -9,11 +10,17 @@
 
 	$: counters = new Array<CounterFrame>(keys.length);
 
+	let gameParameter: GameParameters =
+	{
+		rule: Rule.simple,
+    	whenCorrect: 1,
+    	whenIncorrect: -1,
+    	inicialPoint: 0,
+	}
+
+	let nbyMParameter: NbyMParameters;
+
 	let rule: Rule = Rule.simple;
-
-	let whenCorrect: number;
-
-	let whenIncorrect: number;
 
 	const addCard = () => {
 		keys = [...keys, Math.max(...keys)+1]
@@ -35,7 +42,7 @@
 
 
 <div class="flex justify-center align-middle mb-4 p-1" style="background-color:lightsteelblue;">
-	<p class="text-3xl">{ruleName(rule)}</p>
+	<p class="text-3xl">{ruleName(gameParameter.rule)}</p>
 </div>
 
 <div class="container mx-auto">
@@ -48,23 +55,12 @@
 	</div>
 
 	<div class="grid gap-5 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-		<!-- {#each counters as counter, index (index)}
-			<svelte:component
-				this={counter}
-				{rule}
-				order={index}
-				{whenCorrect}
-				{whenIncorrect}
-				on:delete={deleteCard}
-			/>
-		{/each} -->
 		{#each keys as key, index (key)}
 		<CounterFrame
 			bind:this={counters[index]}
-			{rule}
+			{gameParameter}
+			{nbyMParameter}
 			order={index}
-			{whenCorrect}
-			{whenIncorrect}
 			on:delete={deleteCard}
 		/>
 		{/each}
@@ -72,4 +68,4 @@
 	</div>
 </div>
 
-<Modal bind:open={popupModal} size="xs" outsideclose><Menu bind:rule bind:whenCorrect bind:whenIncorrect /></Modal>
+<Modal bind:open={popupModal} size="md" outsideclose><Menu bind:gameParameter /></Modal>

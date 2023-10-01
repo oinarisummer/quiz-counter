@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { CounterParameters } from '$lib/definitions/parameters';
+	import { Rule } from '$lib/definitions/rules';
 	import { Button } from 'flowbite-svelte';
 	import {
 		CheckCircleSolid,
@@ -6,9 +8,9 @@
 	} from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
 
-	export let correct = 0;
-
-	export let incorrect = 0;
+	export let rule: Rule;
+	
+	export let counterParameter: CounterParameters
 
 	const dispatch = createEventDispatcher();
 
@@ -18,18 +20,30 @@
 
 	const onCorrect = () => {
 		changeScore();
-		correct++;
+		counterParameter.correct++;
 	};
 
-	const onWorng = () => {
+	const onIncorrect = () => {
 		changeScore();
-		incorrect++;
+
+		switch (rule) {
+			case Rule.simple:
+				counterParameter.incorrect++;
+				break;
+			case Rule.updown:
+				counterParameter.incorrect++;
+				counterParameter.correct = 0;
+				break;
+			case Rule.swedish:
+				counterParameter.incorrect += Math.ceil((-1+Math.sqrt(1+8*(counterParameter.correct+1)))/2);
+				break;
+		}
 	};
 </script>
 
 <div class="grid justify-items-center grid-rows-2 grid-flow-col">
-	<p class="text-4xl text-black dark:text-white">{correct}</p>
+	<p class="text-4xl text-black dark:text-white">{counterParameter.correct}</p>
 	<Button color="red" on:click={onCorrect}><CheckCircleSolid /></Button>
-	<p class="text-4xl text-black dark:text-white">{incorrect}</p>
-	<Button color="blue" on:click={onWorng}><CloseCircleSolid /></Button>
+	<p class="text-4xl text-black dark:text-white">{counterParameter.incorrect}</p>
+	<Button color="blue" on:click={onIncorrect}><CloseCircleSolid /></Button>
 </div>

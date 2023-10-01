@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { CounterParameters, GameParameters, NbyMParameters } from '$lib/definitions/parameters';
 	import { Rule } from '$lib/definitions/rules';
 	import { Button, Card, CloseButton } from 'flowbite-svelte';
 	import { ArrowsRepeatSolid, UndoOutline } from 'flowbite-svelte-icons';
@@ -6,39 +7,51 @@
 	import ScoreCounter from './scoreCounter.svelte';
 	import SimpleCounter from './simpleCounter.svelte';
 
-	export let rule: Rule;
+	export let gameParameter: GameParameters;
 
 	export let order: number;
 
-	export let whenCorrect: number;
-
-	export let whenIncorrect: number;
+	export let nbyMParameter: NbyMParameters;
 
 	export const reset = () => {
-		score = 0;
-		correct = 0;
-		incorrect = 0;
+		switch (gameParameter.rule) {
+			case Rule.by:
+				counterParameter.score = 0;
+				counterParameter.correct = 0;
+				counterParameter.incorrect = nbyMParameter.m;
+				break;
+			case Rule.divide:
+				counterParameter.score = gameParameter.inicialPoint;
+				counterParameter.correct = 0;
+				counterParameter.incorrect = 0;
+				break;
+			default:
+				counterParameter.score = 0;
+				counterParameter.correct = 0;
+				counterParameter.incorrect = 0;
+		}
+
 		undoStack = [];
 	};
 
-	let correct: number;
+	let counterParameter: CounterParameters = {
+		score: 0,
+		correct: 0,
+		incorrect: 0
+	}
 
-	let incorrect: number;
-
-	let score: number;
-
-	let undoStack: Array<{ correct: number; worng: number; score: number }> = [];
+	let undoStack: Array<{ correct: number; incorrect: number; score: number }> = [];
 
 	const pushUndoStack = () =>{
-		undoStack.push({ correct: correct, worng: incorrect, score: score });
+		undoStack.push({ correct: counterParameter.correct, incorrect: counterParameter.incorrect, score: counterParameter.score });
 	}
 
 	const undo = () => {
 		const pop = undoStack.pop();
 		if (pop) {
-			correct = pop.correct;
-			incorrect = pop.worng;
-			score = pop.score;
+			counterParameter.correct = pop.correct;
+			counterParameter.incorrect = pop.incorrect;
+			counterParameter.score = pop.score;
 		}
 	};
 
@@ -62,9 +75,13 @@
 
 	<input placeholder="Name?" class="text-xl m-2" />
 
-    {#if rule === Rule.simple}
-        <SimpleCounter bind:correct bind:incorrect on:changed={pushUndoStack} />
-    {:else if rule === Rule.mn}
-        <ScoreCounter {whenCorrect} {whenIncorrect} bind:correct bind:incorrect bind:score on:changed={pushUndoStack} />
+    {#if gameParameter.rule === Rule.simple || gameParameter.rule === Rule.updown || gameParameter.rule === Rule.swedish}
+        <SimpleCounter rule={gameParameter.rule} bind:counterParameter on:changed={pushUndoStack} />
+    {:else if gameParameter.rule === Rule.mn}
+        <ScoreCounter {gameParameter} bind:counterParameter on:changed={pushUndoStack} />
+	{:else if gameParameter.rule === Rule.by}
+		<ScoreCounter {gameParameter} bind:counterParameter on:changed={pushUndoStack} />
+	{:else if gameParameter.rule === Rule.divide}
+		<ScoreCounter {gameParameter} bind:counterParameter on:changed={pushUndoStack} />
     {/if}
 </Card>
