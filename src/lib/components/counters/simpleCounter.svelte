@@ -2,21 +2,18 @@
 	import type { CounterParameters } from '$lib/definitions/parameters';
 	import { Rule } from '$lib/definitions/rules';
 	import { Button } from 'flowbite-svelte';
-	import {
-		CheckCircleSolid,
-		CloseCircleSolid
-	} from 'flowbite-svelte-icons';
+	import { CheckCircleSolid, CloseCircleSolid } from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
 
 	export let rule: Rule;
-	
-	export let counterParameter: CounterParameters
+
+	export let counterParameter: CounterParameters;
 
 	const dispatch = createEventDispatcher();
 
 	const changeScore = () => {
 		dispatch('changed');
-	}
+	};
 
 	const onCorrect = () => {
 		changeScore();
@@ -35,7 +32,9 @@
 				counterParameter.correct = 0;
 				break;
 			case Rule.swedish:
-				counterParameter.incorrect += Math.ceil((-1+Math.sqrt(1+8*(counterParameter.correct+1)))/2);
+				counterParameter.incorrect += Math.ceil(
+					(-1 + Math.sqrt(1 + 8 * (counterParameter.correct + 1))) / 2
+				);
 				break;
 		}
 	};

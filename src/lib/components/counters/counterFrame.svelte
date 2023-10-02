@@ -1,27 +1,24 @@
 <script lang="ts">
-	import type { CounterParameters, GameParameters, NbyMParameters } from '$lib/definitions/parameters';
+	import type { CounterParameters } from '$lib/definitions/parameters';
 	import { Rule } from '$lib/definitions/rules';
+	import { inicialPoint, nByMParameters, rule } from '$lib/store/store';
 	import { Button, Card, CloseButton } from 'flowbite-svelte';
 	import { ArrowsRepeatSolid, UndoOutline } from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
 	import ScoreCounter from './scoreCounter.svelte';
 	import SimpleCounter from './simpleCounter.svelte';
 
-	export let gameParameter: GameParameters;
-
 	export let order: number;
 
-	export let nbyMParameter: NbyMParameters;
-
 	export const reset = () => {
-		switch (gameParameter.rule) {
+		switch ($rule) {
 			case Rule.by:
 				counterParameter.score = 0;
 				counterParameter.correct = 0;
-				counterParameter.incorrect = nbyMParameter.m;
+				counterParameter.incorrect = $nByMParameters.m;
 				break;
 			case Rule.divide:
-				counterParameter.score = gameParameter.inicialPoint;
+				counterParameter.score = $inicialPoint;
 				counterParameter.correct = 0;
 				counterParameter.incorrect = 0;
 				break;
@@ -38,13 +35,17 @@
 		score: 0,
 		correct: 0,
 		incorrect: 0
-	}
+	};
 
 	let undoStack: Array<{ correct: number; incorrect: number; score: number }> = [];
 
-	const pushUndoStack = () =>{
-		undoStack.push({ correct: counterParameter.correct, incorrect: counterParameter.incorrect, score: counterParameter.score });
-	}
+	const pushUndoStack = () => {
+		undoStack.push({
+			correct: counterParameter.correct,
+			incorrect: counterParameter.incorrect,
+			score: counterParameter.score
+		});
+	};
 
 	const undo = () => {
 		const pop = undoStack.pop();
@@ -75,13 +76,9 @@
 
 	<input placeholder="Name?" class="text-xl m-2" />
 
-    {#if gameParameter.rule === Rule.simple || gameParameter.rule === Rule.updown || gameParameter.rule === Rule.swedish}
-        <SimpleCounter rule={gameParameter.rule} bind:counterParameter on:changed={pushUndoStack} />
-    {:else if gameParameter.rule === Rule.mn}
-        <ScoreCounter {gameParameter} bind:counterParameter on:changed={pushUndoStack} />
-	{:else if gameParameter.rule === Rule.by}
-		<ScoreCounter {gameParameter} bind:counterParameter on:changed={pushUndoStack} />
-	{:else if gameParameter.rule === Rule.divide}
-		<ScoreCounter {gameParameter} bind:counterParameter on:changed={pushUndoStack} />
-    {/if}
+	{#if $rule === Rule.simple || $rule === Rule.updown || $rule === Rule.swedish}
+		<SimpleCounter rule={$rule} bind:counterParameter on:changed={pushUndoStack} />
+	{:else}
+		<ScoreCounter bind:counterParameter on:changed={pushUndoStack} />
+	{/if}
 </Card>
