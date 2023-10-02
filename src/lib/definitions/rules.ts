@@ -5,7 +5,8 @@ export const Rule = {
 	by: 3,
 	updown: 4,
 	swedish: 5,
-	divide: 6
+	divide: 6,
+	backstream: 7,
 } as const;
 
 export type Rule = (typeof Rule)[keyof typeof Rule];
@@ -26,5 +27,7 @@ export const ruleName = (rule: Rule): string => {
 			return 'Swedish';
 		case 6:
 			return 'Divide by n';
+		case 7:
+			return 'Backstream'
 	}
 };

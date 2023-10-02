@@ -36,6 +36,8 @@
 					(-1 + Math.sqrt(1 + 8 * (counterParameter.correct + 1))) / 2
 				);
 				break;
+			default:
+				throw new Error("undefined Rule");
 		}
 	};
 </script>

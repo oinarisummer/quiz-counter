@@ -5,7 +5,6 @@
 
 	// for divide by n
 	let divideInicialPoint = 10;
-	let divideWhenCorrect = 10;
 
 	let othersWhenCorect = 1;
 </script>
@@ -38,17 +37,13 @@
 		<span slot="header">{ruleName(Rule.by)}</span>
 		<div class="flex items-center gap-3 m-3">
 			<p>N</p>
-			<input type="number" style="width:4rem" bind:value={$nByMParameters.n} />
+			<input type="number" min="1" style="width:4rem" bind:value={$nByMParameters.n} />
 			<p>M</p>
-			<input type="number" style="width:4rem" bind:value={$nByMParameters.m} />
+			<input type="number" min="1" style="width:4rem" bind:value={$nByMParameters.m} />
 		</div>
 		<div class="flex justify-end">
 			<Button
-				on:click={() => {
-					$rule = Rule.by;
-					$whenCorrect = 1;
-					$whenIncorrect = -1;
-				}}>submit</Button
+				on:click={() => {$rule = Rule.by}}>submit</Button
 			>
 		</div>
 	</AccordionItem>
@@ -68,18 +63,29 @@
 		<span slot="header">{ruleName(Rule.divide)}</span>
 		<div class="flex items-center gap-3 m-3">
 			<p>初期ポイント</p>
-			<input type="number" style="width:4rem" bind:value={divideInicialPoint} />
-			<p>正解ポイント</p>
-			<input type="number" style="width:4rem" bind:value={divideWhenCorrect} />
+			<input type="number" min="1" style="width:4rem" bind:value={divideInicialPoint} />
 		</div>
 		<div class="flex justify-end">
 			<Button
 				on:click={() => {
 					$rule = Rule.divide;
-					$whenCorrect = divideWhenCorrect;
 					$inicialPoint = divideInicialPoint;
 				}}>submit</Button
 			>
+		</div>
+	</AccordionItem>
+	<AccordionItem>
+		<span slot="header">{ruleName(Rule.backstream)}</span>
+		<div class="flex items-center gap-3 m-3">
+			<p>誤答時倍率</p>
+			<input type="number" max="-1" style="width:4rem" bind:value={$whenIncorrect} />
+		</div>
+		<div class="flex justify-end">
+			<Button 
+				on:click={() => {
+					$rule = Rule.backstream;
+					$whenCorrect = 1;
+				}}>submit</Button>
 		</div>
 	</AccordionItem>
 </Accordion>

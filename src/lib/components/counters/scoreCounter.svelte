@@ -17,42 +17,48 @@
 	const onCorrect = () => {
 		changeScore();
 		switch ($rule) {
+			case Rule.mn:
+				counterParameter.correct++;
+				counterParameter.score += $whenCorrect;
+				break;
+			case Rule.by:
+				counterParameter.correct++;
+				counterParameter.score = counterParameter.correct * counterParameter.incorrect;
+				break;
 			case Rule.divide:
 				counterParameter.correct++;
 				counterParameter.score += $inicialPoint;
 				break;
-			default:
+			case Rule.backstream:
 				counterParameter.correct++;
+				counterParameter.score += $whenCorrect;
+				break;
+			default:
+				throw new Error("undefined Rule");
 		}
-		calcScore($whenCorrect);
 	};
 
 	const onIncorrect = () => {
 		changeScore();
 		switch ($rule) {
+			case Rule.mn:
+				counterParameter.incorrect++;
+				counterParameter.score += $whenCorrect;
+				break;
 			case Rule.by:
-				counterParameter.incorrect += $whenIncorrect;
+				counterParameter.incorrect--;
+				counterParameter.score = counterParameter.correct * counterParameter.incorrect;
 				break;
 			case Rule.divide:
 				counterParameter.incorrect++;
 				counterParameter.score = Math.floor(counterParameter.score / counterParameter.incorrect);
 				break;
-			default:
+			case Rule.backstream:
 				counterParameter.incorrect++;
-		}
-		calcScore($whenIncorrect);
-	};
-
-	const calcScore = (scoreDelta: number) => {
-		switch ($rule) {
-			case Rule.mn:
-				counterParameter.score = counterParameter.score + scoreDelta;
+				counterParameter.score += $whenIncorrect * counterParameter.incorrect;
 				break;
-			case Rule.by:
-				counterParameter.score = counterParameter.correct * counterParameter.incorrect;
-				break;
-			case Rule.divide:
-				break;
+			default:
+				throw new Error("undefined Rule");
 		}
 	};
 </script>
