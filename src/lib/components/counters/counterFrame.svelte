@@ -74,7 +74,7 @@
 		<CloseButton on:click={deleteClick} />
 	</div>
 
-	<input placeholder="Name?" class="text-xl m-2" />
+	<input placeholder="Name?" class="text-3xl text-center m-2" />
 
 	{#if $rule === Rule.simple || $rule === Rule.updown || $rule === Rule.swedish}
 		<SimpleCounter rule={$rule} bind:counterParameter on:changed={pushUndoStack} />

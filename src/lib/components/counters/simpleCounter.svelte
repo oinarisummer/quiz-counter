@@ -43,8 +43,8 @@
 </script>
 
 <div class="grid justify-items-center grid-rows-2 grid-flow-col">
-	<p class="text-4xl text-black dark:text-white">{counterParameter.correct}</p>
-	<Button color="red" on:click={onCorrect}><CheckCircleSolid /></Button>
-	<p class="text-4xl text-black dark:text-white">{counterParameter.incorrect}</p>
-	<Button color="blue" on:click={onIncorrect}><CloseCircleSolid /></Button>
+	<p class="text-5xl text-black dark:text-white">{counterParameter.correct}</p>
+	<Button color="red" class="h-10" on:click={onCorrect}><CheckCircleSolid /></Button>
+	<p class="text-5xl text-black dark:text-white">{counterParameter.incorrect}</p>
+	<Button color="blue" class="h-10"  on:click={onIncorrect}><CloseCircleSolid /></Button>
 </div>
