@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CounterFrame from '$lib/components/counters/counterFrame.svelte';
-	import Menu from '$lib/components/menu.svelte';
+	import RuleSetting from '$lib/components/ruleSetting.svelte';
 	import { Rule, ruleName } from '$lib/definitions/rules';
 	import { nByMGoalScore, nByMParameters, rule, whenCorrect, whenIncorrect } from '$lib/store/store';
 	import { Button, Modal, Tooltip } from 'flowbite-svelte';
@@ -62,4 +62,4 @@
 	</div>
 </div>
 
-<Modal bind:open={popupModal} size="md" outsideclose><Menu /></Modal>
+<Modal bind:open={popupModal} size="md" outsideclose><RuleSetting /></Modal>
