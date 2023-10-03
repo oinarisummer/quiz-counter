@@ -1,8 +1,6 @@
 <script lang="ts">
 	import CounterFrame from '$lib/components/counters/counterFrame.svelte';
 	import RuleSetting from '$lib/components/ruleSetting.svelte';
-	import { Rule, ruleName } from '$lib/definitions/rules';
-	import { nByMGoalScore, nByMParameters, rule, whenCorrect, whenIncorrect } from '$lib/store/store';
 	import { Button, Modal, Tooltip } from 'flowbite-svelte';
 	import { ArrowsRepeatSolid, GearSolid, PlusSolid } from 'flowbite-svelte-icons';
 
@@ -27,23 +25,7 @@
 
 	let popupModal = false;
 
-	$: title = () => {
-		switch($rule) {
-			case Rule.mn:
-				return `+${$whenCorrect}/${$whenIncorrect}`
-			case Rule.by:
-				return `${$nByMParameters.n} by ${$nByMParameters.m} (${$nByMGoalScore})`
-			case Rule.backstream:
-				return $whenIncorrect == -1 ? 'Backstream -n' : `Backstream ${$whenIncorrect}n`
-			default:
-				return ruleName($rule)
-		}
-	}
 </script>
-
-<div class="flex justify-center align-middle mb-4 p-1" style="background-color:lightsteelblue;">
-	<p class="text-3xl">{title()}</p>
-</div>
 
 <div class="container mx-auto">
 	<div class="flex justify-end align-middle gap-3 m-3">

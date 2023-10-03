@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { CounterParameters } from '$lib/definitions/parameters';
-	import { Rule } from '$lib/definitions/rules';
+	import { RuleType } from '$lib/definitions/rules';
+	import { rule } from '$lib/store/store';
 	import { Button } from 'flowbite-svelte';
 	import { CheckCircleSolid, CloseCircleSolid } from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
-
-	export let rule: Rule;
 
 	export let counterParameter: CounterParameters;
 
@@ -23,15 +22,15 @@
 	const onIncorrect = () => {
 		changeScore();
 
-		switch (rule) {
-			case Rule.simple:
+		switch ($rule) {
+			case RuleType.simple:
 				counterParameter.incorrect++;
 				break;
-			case Rule.updown:
+			case RuleType.updown:
 				counterParameter.incorrect++;
 				counterParameter.correct = 0;
 				break;
-			case Rule.swedish:
+			case RuleType.swedish:
 				counterParameter.incorrect += Math.ceil(
 					(-1 + Math.sqrt(1 + 8 * (counterParameter.correct + 1))) / 2
 				);

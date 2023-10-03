@@ -1,4 +1,4 @@
-export const Rule = {
+export const RuleType = {
 	undefined: 0,
 	simple: 1,
 	mn: 2,
@@ -9,9 +9,9 @@ export const Rule = {
 	backstream: 7,
 } as const;
 
-export type Rule = (typeof Rule)[keyof typeof Rule];
+export type RuleType = (typeof RuleType)[keyof typeof RuleType];
 
-export const ruleName = (rule: Rule): string => {
+export const ruleName = (rule: RuleType): string => {
 	switch (rule) {
 		case 0:
 			return 'undefined';
@@ -31,3 +31,23 @@ export const ruleName = (rule: Rule): string => {
 			return 'Backstream'
 	}
 };
+
+export const CounterType = {
+	undefined: 0,
+	simple: 1,
+	score: 2,
+} as const;
+
+export type CounterType = (typeof CounterType)[keyof typeof CounterType];
+
+export const counterType = (rule:RuleType): CounterType => {
+	switch (rule){
+	case 2:
+	case 3:
+	case 6:
+	case 7:
+		return CounterType.score;
+	default:
+		return CounterType.simple;
+	}
+}

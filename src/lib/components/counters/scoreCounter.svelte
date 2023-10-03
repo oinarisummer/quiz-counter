@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CounterParameters } from '$lib/definitions/parameters';
-	import { Rule } from '$lib/definitions/rules';
+	import { RuleType } from '$lib/definitions/rules';
 	import { inicialPoint, rule, whenCorrect, whenIncorrect } from '$lib/store/store';
 	import { Button } from 'flowbite-svelte';
 	import { CheckCircleSolid, CloseCircleSolid } from 'flowbite-svelte-icons';
@@ -17,19 +17,19 @@
 	const onCorrect = () => {
 		changeScore();
 		switch ($rule) {
-			case Rule.mn:
+			case RuleType.mn:
 				counterParameter.correct++;
 				counterParameter.score += $whenCorrect;
 				break;
-			case Rule.by:
+			case RuleType.by:
 				counterParameter.correct++;
 				counterParameter.score = counterParameter.correct * counterParameter.incorrect;
 				break;
-			case Rule.divide:
+			case RuleType.divide:
 				counterParameter.correct++;
 				counterParameter.score += $inicialPoint;
 				break;
-			case Rule.backstream:
+			case RuleType.backstream:
 				counterParameter.correct++;
 				counterParameter.score += $whenCorrect;
 				break;
@@ -41,19 +41,19 @@
 	const onIncorrect = () => {
 		changeScore();
 		switch ($rule) {
-			case Rule.mn:
+			case RuleType.mn:
 				counterParameter.incorrect++;
 				counterParameter.score += $whenCorrect;
 				break;
-			case Rule.by:
+			case RuleType.by:
 				counterParameter.incorrect--;
 				counterParameter.score = counterParameter.correct * counterParameter.incorrect;
 				break;
-			case Rule.divide:
+			case RuleType.divide:
 				counterParameter.incorrect++;
 				counterParameter.score = Math.floor(counterParameter.score / counterParameter.incorrect);
 				break;
-			case Rule.backstream:
+			case RuleType.backstream:
 				counterParameter.incorrect++;
 				counterParameter.score += $whenIncorrect * counterParameter.incorrect;
 				break;
