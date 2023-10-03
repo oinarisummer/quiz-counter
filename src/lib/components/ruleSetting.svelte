@@ -12,9 +12,7 @@
 		<span slot="header">{ruleName(RuleType.simple)}</span>
 		<p>正答数と誤答数をカウントするシンプルなルールです。</p>
 		<div class="flex justify-end">
-			<Button on:click={() => ($rule = RuleType.simple)}>
-				submit
-			</Button>
+			<Button on:click={() => ($rule = RuleType.simple)}>submit</Button>
 		</div>
 	</AccordionItem>
 	<AccordionItem>
@@ -62,18 +60,14 @@
 		<span slot="header">{ruleName(RuleType.updown)}</span>
 		<p>正解で+1ポイント、誤答でポイントが0になります。</p>
 		<div class="flex justify-end">
-			<Button on:click={() => ($rule = RuleType.updown)}>
-				submit
-			</Button>
+			<Button on:click={() => ($rule = RuleType.updown)}>submit</Button>
 		</div>
 	</AccordionItem>
 	<AccordionItem>
 		<span slot="header">{ruleName(RuleType.swedish)}</span>
 		<p>スウェーデンリレーの様に、正解数が増えると誤答時のバツが増えます。</p>
 		<div class="flex justify-end">
-			<Button on:click={() => ($rule = RuleType.swedish)}>
-				submit
-			</Button>
+			<Button on:click={() => ($rule = RuleType.swedish)}>submit</Button>
 		</div>
 	</AccordionItem>
 	<AccordionItem>
