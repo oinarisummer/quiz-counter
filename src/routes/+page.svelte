@@ -24,7 +24,6 @@
 	};
 
 	let popupModal = false;
-
 </script>
 
 <div class="container mx-auto">

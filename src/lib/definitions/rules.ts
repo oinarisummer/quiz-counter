@@ -6,7 +6,7 @@ export const RuleType = {
 	updown: 4,
 	swedish: 5,
 	divide: 6,
-	backstream: 7,
+	backstream: 7
 } as const;
 
 export type RuleType = (typeof RuleType)[keyof typeof RuleType];
@@ -28,26 +28,26 @@ export const ruleName = (rule: RuleType): string => {
 		case 6:
 			return 'Divide by n';
 		case 7:
-			return 'Backstream'
+			return 'Backstream';
 	}
 };
 
 export const CounterType = {
 	undefined: 0,
 	simple: 1,
-	score: 2,
+	score: 2
 } as const;
 
 export type CounterType = (typeof CounterType)[keyof typeof CounterType];
 
-export const counterType = (rule:RuleType): CounterType => {
-	switch (rule){
-	case 2:
-	case 3:
-	case 6:
-	case 7:
-		return CounterType.score;
-	default:
-		return CounterType.simple;
+export const counterType = (rule: RuleType): CounterType => {
+	switch (rule) {
+		case 2:
+		case 3:
+		case 6:
+		case 7:
+			return CounterType.score;
+		default:
+			return CounterType.simple;
 	}
-}
+};

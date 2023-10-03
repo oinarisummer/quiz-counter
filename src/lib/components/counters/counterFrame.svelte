@@ -61,6 +61,8 @@
 			counterParameter.score = pop.score;
 		}
 	};
+
+	$: counter = counterType($rule) === CounterType.score ? ScoreCounter : SimpleCounter;
 </script>
 
 <Card>
@@ -76,9 +78,5 @@
 
 	<input placeholder="Name?" class="text-3xl text-center m-2" />
 
-	{#if counterType($rule) === CounterType.score}
-		<ScoreCounter bind:counterParameter on:changed={pushUndoStack} />
-	{:else}
-		<SimpleCounter bind:counterParameter on:changed={pushUndoStack} />
-	{/if}
+	<svelte:component this={counter} bind:counterParameter on:changed={pushUndoStack} />
 </Card>

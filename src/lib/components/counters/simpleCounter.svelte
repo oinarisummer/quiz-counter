@@ -36,7 +36,7 @@
 				);
 				break;
 			default:
-				throw new Error("undefined Rule");
+				throw new Error('undefined Rule');
 		}
 	};
 </script>
@@ -45,5 +45,5 @@
 	<p class="text-5xl text-black dark:text-white">{counterParameter.correct}</p>
 	<Button color="red" class="h-10" on:click={onCorrect}><CheckCircleSolid /></Button>
 	<p class="text-5xl text-black dark:text-white">{counterParameter.incorrect}</p>
-	<Button color="blue" class="h-10"  on:click={onIncorrect}><CloseCircleSolid /></Button>
+	<Button color="blue" class="h-10" on:click={onIncorrect}><CloseCircleSolid /></Button>
 </div>
