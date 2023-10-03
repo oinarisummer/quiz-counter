@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CounterParameters } from '$lib/definitions/parameters';
-	import { Rule } from '$lib/definitions/rules';
+	import { CounterType, RuleType, counterType } from '$lib/definitions/rules';
 	import { inicialPoint, nByMParameters, rule } from '$lib/store/store';
 	import { Button, Card, CloseButton } from 'flowbite-svelte';
 	import { ArrowsRepeatSolid, UndoOutline } from 'flowbite-svelte-icons';
@@ -10,14 +10,20 @@
 
 	export let order: number;
 
+	const dispatch = createEventDispatcher();
+
+	function deleteClick() {
+		dispatch('delete', order);
+	}
+
 	export const reset = () => {
 		switch ($rule) {
-			case Rule.by:
+			case RuleType.by:
 				counterParameter.score = 0;
 				counterParameter.correct = 0;
 				counterParameter.incorrect = $nByMParameters.m;
 				break;
-			case Rule.divide:
+			case RuleType.divide:
 				counterParameter.score = $inicialPoint;
 				counterParameter.correct = 0;
 				counterParameter.incorrect = 0;
@@ -55,19 +61,13 @@
 			counterParameter.score = pop.score;
 		}
 	};
-
-	const dispatch = createEventDispatcher();
-
-	function deleteClick() {
-		dispatch('delete', order);
-	}
 </script>
 
 <Card>
 	<div class="flex justify-end gap-4">
 		{#if undoStack.length > 0}
 			<Button color="dark" size="xs" on:click={undo}><UndoOutline /></Button>
-		{:else}
+		{:else}RuleTypeRuleTypeRuleType
 			<Button color="dark" size="xs" disabled><UndoOutline /></Button>
 		{/if}
 		<Button color="dark" size="xs" on:click={reset}><ArrowsRepeatSolid /></Button>
@@ -76,9 +76,9 @@
 
 	<input placeholder="Name?" class="text-3xl text-center m-2" />
 
-	{#if $rule === Rule.simple || $rule === Rule.updown || $rule === Rule.swedish}
-		<SimpleCounter rule={$rule} bind:counterParameter on:changed={pushUndoStack} />
-	{:else}
+	{#if counterType($rule) === CounterType.score}
 		<ScoreCounter bind:counterParameter on:changed={pushUndoStack} />
+	{:else}
+		<SimpleCounter bind:counterParameter on:changed={pushUndoStack} />
 	{/if}
 </Card>

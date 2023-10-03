@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Rule, ruleName } from '$lib/definitions/rules';
+	import { RuleType, ruleName } from '$lib/definitions/rules';
 	import { inicialPoint, nByMParameters, rule, whenCorrect, whenIncorrect } from '$lib/store/store';
 	import { Accordion, AccordionItem, Button } from 'flowbite-svelte';
 
@@ -11,14 +11,14 @@
 
 <Accordion class="my-5">
 	<AccordionItem>
-		<span slot="header">{ruleName(Rule.simple)}</span>
+		<span slot="header">{ruleName(RuleType.simple)}</span>
 		<p>正答数と誤答数をカウントするシンプルなルールです。</p>
 		<div class="flex justify-end">
-			<Button on:click={() => ($rule = Rule.simple)}>submit</Button>
+			<Button on:click={() => ($rule = RuleType.simple)}>submit</Button>
 		</div>
 	</AccordionItem>
 	<AccordionItem>
-		<span slot="header">{ruleName(Rule.mn)}</span>
+		<span slot="header">{ruleName(RuleType.mn)}</span>
 		<p>正解でmポイント、誤答でnポイント点数が変動します。</p>
 		<div class="flex items-center gap-3 m-3">
 			<p>正解ポイント</p>
@@ -29,14 +29,14 @@
 		<div class="flex justify-end">
 			<Button
 				on:click={() => {
-					$rule = Rule.mn;
+					$rule = RuleType.mn;
 					$whenCorrect = othersWhenCorect;
 				}}>submit</Button
 			>
 		</div>
 	</AccordionItem>
 	<AccordionItem>
-		<span slot="header">{ruleName(Rule.by)}</span>
+		<span slot="header">{ruleName(RuleType.by)}</span>
 		<p>
 			0ポイントmバツからスタートします。<br>
 			正解で+1マル、誤答で-1バツとなり、
@@ -50,26 +50,26 @@
 		</div>
 		<div class="flex justify-end">
 			<Button
-				on:click={() => {$rule = Rule.by}}>submit</Button
+				on:click={() => {$rule = RuleType.by}}>submit</Button
 			>
 		</div>
 	</AccordionItem>
 	<AccordionItem>
-		<span slot="header">{ruleName(Rule.updown)}</span>
+		<span slot="header">{ruleName(RuleType.updown)}</span>
 		<p>正解で+1ポイント、誤答でポイントが0になります。</p>
 		<div class="flex justify-end">
-			<Button on:click={() => ($rule = Rule.updown)}>submit</Button>
+			<Button on:click={() => ($rule = RuleType.updown)}>submit</Button>
 		</div>
 	</AccordionItem>
 	<AccordionItem>
-		<span slot="header">{ruleName(Rule.swedish)}</span>
+		<span slot="header">{ruleName(RuleType.swedish)}</span>
 		<p>スウェーデンリレーの様に、正解数が増えると誤答時のバツが増えます。</p>
 		<div class="flex justify-end">
-			<Button on:click={() => ($rule = Rule.swedish)}>submit</Button>
+			<Button on:click={() => ($rule = RuleType.swedish)}>submit</Button>
 		</div>
 	</AccordionItem>
 	<AccordionItem>
-		<span slot="header">{ruleName(Rule.divide)}</span>
+		<span slot="header">{ruleName(RuleType.divide)}</span>
 		<p>
 			初期ポイントからスタートします。<br>
 			正解で+初期ポイント、
@@ -82,14 +82,14 @@
 		<div class="flex justify-end">
 			<Button
 				on:click={() => {
-					$rule = Rule.divide;
+					$rule = RuleType.divide;
 					$inicialPoint = divideInicialPoint;
 				}}>submit</Button
 			>
 		</div>
 	</AccordionItem>
 	<AccordionItem>
-		<span slot="header">{ruleName(Rule.backstream)}</span>
+		<span slot="header">{ruleName(RuleType.backstream)}</span>
 		<p>
 			n回目の誤答でポイントが(誤答時倍率) x n変動します。
 		</p>
@@ -100,7 +100,7 @@
 		<div class="flex justify-end">
 			<Button 
 				on:click={() => {
-					$rule = Rule.backstream;
+					$rule = RuleType.backstream;
 					$whenCorrect = 1;
 				}}>submit</Button>
 		</div>
