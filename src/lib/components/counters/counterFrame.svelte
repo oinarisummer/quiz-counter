@@ -67,7 +67,7 @@
 	<div class="flex justify-end gap-4">
 		{#if undoStack.length > 0}
 			<Button color="dark" size="xs" on:click={undo}><UndoOutline /></Button>
-		{:else}RuleTypeRuleTypeRuleType
+		{:else}
 			<Button color="dark" size="xs" disabled><UndoOutline /></Button>
 		{/if}
 		<Button color="dark" size="xs" on:click={reset}><ArrowsRepeatSolid /></Button>
