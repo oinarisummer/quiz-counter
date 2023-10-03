@@ -5,8 +5,6 @@
 
 	// for divide by n
 	let divideInicialPoint = 10;
-
-	let othersWhenCorect = 1;
 </script>
 
 <Accordion class="my-5">
@@ -22,7 +20,7 @@
 		<p>正解でmポイント、誤答でnポイント点数が変動します。</p>
 		<div class="flex items-center gap-3 m-3">
 			<p>正解ポイント</p>
-			<input type="number" style="width:4rem" bind:value={othersWhenCorect} />
+			<input type="number" style="width:4rem" bind:value={$whenCorrect} />
 			<p>誤答ポイント</p>
 			<input type="number" style="width:4rem" bind:value={$whenIncorrect} />
 		</div>
@@ -30,7 +28,6 @@
 			<Button
 				on:click={() => {
 					$rule = RuleType.mn;
-					$whenCorrect = othersWhenCorect;
 				}}>submit</Button
 			>
 		</div>
