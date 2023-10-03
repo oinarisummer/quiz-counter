@@ -16,6 +16,7 @@
 
 	const onCorrect = () => {
 		changeScore();
+
 		switch ($rule) {
 			case RuleType.mn:
 				counterParameter.correct++;
@@ -34,12 +35,13 @@
 				counterParameter.score += $whenCorrect;
 				break;
 			default:
-				throw new Error("undefined Rule");
+				throw new Error('undefined Rule');
 		}
 	};
 
 	const onIncorrect = () => {
 		changeScore();
+
 		switch ($rule) {
 			case RuleType.mn:
 				counterParameter.incorrect++;
@@ -58,14 +60,14 @@
 				counterParameter.score += $whenIncorrect * counterParameter.incorrect;
 				break;
 			default:
-				throw new Error("undefined Rule");
+				throw new Error('undefined Rule');
 		}
 	};
 </script>
 
-<span class="flex justify-center"
-	><p class="text-6xl text-black dark:text-white">{counterParameter.score}</p></span
->
+<span class="flex justify-center">
+	<p class="text-6xl text-black dark:text-white">{counterParameter.score}</p>
+</span>
 
 <div class="grid justify-items-center grid-rows-2 grid-flow-col">
 	<p class="text-4xl text-black dark:text-white">{counterParameter.correct}</p>

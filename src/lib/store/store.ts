@@ -14,4 +14,7 @@ export const nByMParameters = writable<{
 	m: 10
 });
 
-export const nByMGoalScore = derived(nByMParameters, ($nByMParameters) => $nByMParameters.n*$nByMParameters.m)
+export const nByMGoalScore = derived(
+	nByMParameters,
+	($nByMParameters) => $nByMParameters.n * $nByMParameters.m
+);
