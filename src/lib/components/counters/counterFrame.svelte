@@ -53,7 +53,7 @@
 		});
 	};
 
-	export const undo = () => {
+	const undo = () => {
 		const pop = undoStack.pop();
 		if (pop) {
 			counterParameter.correct = pop.correct;
