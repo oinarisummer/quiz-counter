@@ -2,9 +2,6 @@
 	import { RuleType, ruleName } from '$lib/definitions/rules';
 	import { inicialPoint, nByMParameters, rule, whenCorrect, whenIncorrect } from '$lib/store/store';
 	import { Accordion, AccordionItem, Button } from 'flowbite-svelte';
-
-	// for divide by n
-	let divideInicialPoint = 10;
 </script>
 
 <Accordion class="my-5">
@@ -78,13 +75,12 @@
 		</p>
 		<div class="flex items-center gap-3 m-3">
 			<p>初期ポイント</p>
-			<input type="number" min="1" style="width:4rem" bind:value={divideInicialPoint} />
+			<input type="number" min="1" style="width:4rem" bind:value={ $inicialPoint} />
 		</div>
 		<div class="flex justify-end">
 			<Button
 				on:click={() => {
 					$rule = RuleType.divide;
-					$inicialPoint = divideInicialPoint;
 				}}
 			>
 				submit
