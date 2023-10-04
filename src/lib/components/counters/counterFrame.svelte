@@ -16,6 +16,12 @@
 		dispatch('delete', order);
 	}
 
+	let counterParameter: CounterParameters = {
+		score: 0,
+		correct: 0,
+		incorrect: 0
+	};
+
 	export const reset = () => {
 		switch ($rule) {
 			case RuleType.by:
@@ -37,12 +43,6 @@
 		undoStack = [];
 	};
 
-	let counterParameter: CounterParameters = {
-		score: 0,
-		correct: 0,
-		incorrect: 0
-	};
-
 	let undoStack: Array<{ correct: number; incorrect: number; score: number }> = [];
 
 	const pushUndoStack = () => {
@@ -53,7 +53,7 @@
 		});
 	};
 
-	export const undo = () => {
+	const undo = () => {
 		const pop = undoStack.pop();
 		if (pop) {
 			counterParameter.correct = pop.correct;

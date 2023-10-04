@@ -27,6 +27,7 @@
 	);
 </script>
 
+<title>Quiz Counter</title>
 <div class="flex justify-center align-middle mb-4 p-1" style="background-color:lightsteelblue;">
 	<h1 class="text-3xl">{$title}</h1>
 </div>

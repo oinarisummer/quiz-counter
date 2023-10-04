@@ -45,7 +45,7 @@
 		switch ($rule) {
 			case RuleType.mn:
 				counterParameter.incorrect++;
-				counterParameter.score += $whenCorrect;
+				counterParameter.score += $whenIncorrect;
 				break;
 			case RuleType.by:
 				counterParameter.incorrect--;
