@@ -75,7 +75,7 @@
 		</p>
 		<div class="flex items-center gap-3 m-3">
 			<p>初期ポイント</p>
-			<input type="number" min="1" style="width:4rem" bind:value={ $inicialPoint} />
+			<input type="number" min="1" style="width:4rem" bind:value={$inicialPoint} />
 		</div>
 		<div class="flex justify-end">
 			<Button
