@@ -67,7 +67,7 @@
 
 <Card>
 	<div class="flex justify-end gap-4">
-		<Button color="dark" size="xs" on:click={undo} disabled={undoStack.length == 0}><UndoOutline /></Button>
+		<Button color="dark" size="xs" on:click={undo} disabled={undoStack.length === 0}><UndoOutline /></Button>
 		<Button color="dark" size="xs" on:click={reset}><ArrowsRepeatSolid /></Button>
 		<CloseButton on:click={deleteClick} />
 	</div>
