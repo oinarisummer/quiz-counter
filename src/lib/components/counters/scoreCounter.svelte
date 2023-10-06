@@ -3,7 +3,7 @@
 	import { RuleType } from '$lib/definitions/rules';
 	import { inicialPoint, rule, whenCorrect, whenIncorrect } from '$lib/store/store';
 	import { Button } from 'flowbite-svelte';
-	import { CheckCircleSolid, CloseCircleSolid } from 'flowbite-svelte-icons';
+	import { CheckSolid, CloseSolid } from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
 
 	export let counterParameter: CounterParameters;
@@ -71,7 +71,7 @@
 
 <div class="grid justify-items-center grid-rows-2 grid-flow-col">
 	<p class="text-4xl text-black dark:text-white">{counterParameter.correct}</p>
-	<Button color="red" on:click={onCorrect}><CheckCircleSolid /></Button>
+	<Button color="red" on:click={onCorrect}><CheckSolid /></Button>
 	<p class="text-4xl text-black dark:text-white">{counterParameter.incorrect}</p>
-	<Button color="blue" on:click={onIncorrect}><CloseCircleSolid /></Button>
+	<Button color="blue" on:click={onIncorrect}><CloseSolid /></Button>
 </div>
