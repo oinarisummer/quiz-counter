@@ -46,11 +46,14 @@
 	let undoStack: Array<{ correct: number; incorrect: number; score: number }> = [];
 
 	const pushUndoStack = () => {
-		undoStack.push({
-			correct: counterParameter.correct,
-			incorrect: counterParameter.incorrect,
-			score: counterParameter.score
-		});
+		undoStack = [
+			...undoStack,
+			{
+				correct: counterParameter.correct,
+				incorrect: counterParameter.incorrect,
+				score: counterParameter.score
+			}
+		];
 	};
 
 	const undo = () => {
@@ -62,16 +65,13 @@
 		}
 	};
 
+	$: hasUndoStack = undoStack.length > 0;
 	$: counter = counterType($rule) === CounterType.score ? ScoreCounter : SimpleCounter;
 </script>
 
 <Card>
 	<div class="flex justify-end gap-4">
-		{#if undoStack.length > 0}
-			<Button color="dark" size="xs" on:click={undo}><UndoOutline /></Button>
-		{:else}
-			<Button color="dark" size="xs" disabled><UndoOutline /></Button>
-		{/if}
+		<Button color="dark" size="xs" on:click={undo} disabled={!hasUndoStack}><UndoOutline /></Button>
 		<Button color="dark" size="xs" on:click={reset}><ArrowsRepeatSolid /></Button>
 		<CloseButton on:click={deleteClick} />
 	</div>
