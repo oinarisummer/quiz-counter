@@ -7,6 +7,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import ScoreCounter from './scoreCounter.svelte';
 	import SimpleCounter from './simpleCounter.svelte';
+	import SwedishCounter from './swedishCounter.svelte';
 
 	export let order: number;
 
@@ -66,7 +67,8 @@
 	};
 
 	$: hasUndoStack = undoStack.length > 0;
-	$: counter = counterType($rule) === CounterType.score ? ScoreCounter : SimpleCounter;
+	// HACK
+	$: counter =  counterType($rule) === CounterType.score ? ScoreCounter : counterType($rule) === CounterType.swedish ? SwedishCounter : SimpleCounter;
 </script>
 
 <Card>

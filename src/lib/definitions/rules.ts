@@ -35,7 +35,8 @@ export const ruleName = (rule: RuleType): string => {
 export const CounterType = {
 	undefined: 0,
 	simple: 1,
-	score: 2
+	score: 2,
+	swedish: 3,
 } as const;
 
 export type CounterType = (typeof CounterType)[keyof typeof CounterType];
@@ -47,6 +48,8 @@ export const counterType = (rule: RuleType): CounterType => {
 		case 6:
 		case 7:
 			return CounterType.score;
+		case 5:
+			return CounterType.swedish;
 		default:
 			return CounterType.simple;
 	}
