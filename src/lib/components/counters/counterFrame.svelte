@@ -2,28 +2,26 @@
 	import type { CounterParameters } from '$lib/definitions/parameters';
 	import { CounterType, RuleType, counterType } from '$lib/definitions/rules';
 	import { inicialPoint, nByMParameters, rule } from '$lib/store/store';
-	import { Button, Card, CloseButton } from 'flowbite-svelte';
-	import { ArrowsRepeatSolid, UndoOutline } from 'flowbite-svelte-icons';
+	import { Card, CloseButton } from 'flowbite-svelte';
+	import { ArrowsRepeatSolid } from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
 	import ScoreCounter from './scoreCounter.svelte';
 	import SimpleCounter from './simpleCounter.svelte';
 	import SwedishCounter from './swedishCounter.svelte';
 
-	export let order: number;
+	export let counterParameter: CounterParameters 
 
-	const dispatch = createEventDispatcher();
+	export let order: number
 
-	function deleteClick() {
+	const dispatch = createEventDispatcher()
+
+	const deleteClick = () => {
 		dispatch('delete', order);
 	}
 
-	let counterParameter: CounterParameters = {
-		score: 0,
-		correct: 0,
-		incorrect: 0
-	};
-
 	export const reset = () => {
+		dispatch('changed')
+
 		switch ($rule) {
 			case RuleType.by:
 				counterParameter.score = 0;
@@ -40,45 +38,19 @@
 				counterParameter.correct = 0;
 				counterParameter.incorrect = 0;
 		}
+	}
 
-		undoStack = [];
-	};
-
-	let undoStack: Array<{ correct: number; incorrect: number; score: number }> = [];
-
-	const pushUndoStack = () => {
-		undoStack = [
-			...undoStack,
-			{
-				correct: counterParameter.correct,
-				incorrect: counterParameter.incorrect,
-				score: counterParameter.score
-			}
-		];
-	};
-
-	const undo = () => {
-		const pop = undoStack.pop();
-		if (pop) {
-			counterParameter.correct = pop.correct;
-			counterParameter.incorrect = pop.incorrect;
-			counterParameter.score = pop.score;
-		}
-	};
-
-	$: hasUndoStack = undoStack.length > 0;
 	// HACK
-	$: counter =  counterType($rule) === CounterType.score ? ScoreCounter : counterType($rule) === CounterType.swedish ? SwedishCounter : SimpleCounter;
+	$: counter =  counterType($rule) === CounterType.score ? ScoreCounter : counterType($rule) === CounterType.swedish ? SwedishCounter : SimpleCounter
 </script>
 
 <Card>
-	<div class="flex justify-end gap-4">
-		<Button color="dark" size="xs" on:click={undo} disabled={!hasUndoStack}><UndoOutline /></Button>
-		<Button color="dark" size="xs" on:click={reset}><ArrowsRepeatSolid /></Button>
+	<div class="flex justify-end items-center gap-4">
+		<ArrowsRepeatSolid  on:click={reset} />
 		<CloseButton on:click={deleteClick} />
 	</div>
 
 	<input placeholder="Name?" class="text-3xl text-center m-2" />
 
-	<svelte:component this={counter} bind:counterParameter on:changed={pushUndoStack} />
+	<svelte:component this={counter} bind:counterParameter on:changed />
 </Card>
