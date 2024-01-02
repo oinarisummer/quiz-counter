@@ -15,44 +15,50 @@
 		undoStack = []
 	})
 
-	const inicialCard = (): CounterParameters => {
+	const inicialCard = (id: number): CounterParameters => {
 		switch ($rule) {
 			case RuleType.by:
-				return { score: 0, correct: 0, incorrect: $nByMParameters.m }
+				return { id:id, score: 0, correct: 0, incorrect: $nByMParameters.m }
 			case RuleType.divide:
-				return { score: $inicialPoint, correct: 0, incorrect: 0 }
+				return { id:id, score: $inicialPoint, correct: 0, incorrect: 0 }
 			default:
-				return { score: 0, correct: 0, incorrect: 0 }
+				return { id:id, score: 0, correct: 0, incorrect: 0 }
 		}
 	}
 
 	const addCard = () => {
-		pushUndoStack()
-		counters = [...counters, inicialCard()]
+		counters = [...counters, inicialCard(counters.length + 1)]
 	}
 
 	const deleteCard = (event: CustomEvent) => {
-		pushUndoStack()
 		counters = counters.toSpliced(event.detail, 1)
 	}
 
-	let undoStack: Array<CounterParameters[]> = new Array()
+	let undoStack: CounterParameters[] = new Array()
 
-	const pushUndoStack = () => {
-		undoStack = [...undoStack, structuredClone(counters)]
+	const pushUndoStack = (event: CustomEvent) => {
+		const changedCounter = counters.find((counters) => counters.id === event.detail)
+		if (changedCounter) {
+			undoStack = [...undoStack, structuredClone(changedCounter)]	
+		}
 	}
 
 	const undo = () => {
 		const pop = undoStack.pop()
 		if (pop) {
-			counters = pop
+			counters = counters.map((counter) => {
+				if (counter.id === pop.id) {
+					return pop
+				}
+				return counter
+			})
 		}
 	}
 
 	$: hasUndoStack = undoStack.length > 0;
 
 	const allReset = () => {
-		counters = counters.map((counter) => inicialCard())
+		counters = counters.map((counter) => inicialCard(counter.id))
 		undoStack = []
 	}
 

@@ -11,7 +11,7 @@
 	const dispatch = createEventDispatcher();
 
 	const changeScore = () => {
-		dispatch('changed');
+		dispatch('changed', counterParameter.id);
 	};
 
 	const onCorrect = () => {

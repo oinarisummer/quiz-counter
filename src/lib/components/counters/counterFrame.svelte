@@ -20,7 +20,7 @@
 	}
 
 	export const reset = () => {
-		dispatch('changed')
+		dispatch('changed', counterParameter.id)
 
 		switch ($rule) {
 			case RuleType.by:
