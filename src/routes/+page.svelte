@@ -31,7 +31,7 @@
 	}
 
 	const deleteCard = (event: CustomEvent) => {
-		counters = counters.toSpliced(event.detail, 1)
+		counters = counters.filter((counter) => counter.id != event.detail)
 	}
 
 	let undoStack: CounterParameters[] = new Array()
