@@ -1,26 +1,25 @@
 <script lang="ts">
 	import type { CounterParameters } from '$lib/definitions/parameters';
 	import { RuleType } from '$lib/definitions/rules';
-	import { inicialPoint, rule, whenCorrect, whenIncorrect } from '$lib/store/store';
+	import { ruleSet } from '$lib/state/state.svelte';
 	import { Button } from 'flowbite-svelte';
-	import { CheckSolid, CloseSolid } from 'flowbite-svelte-icons';
-	import { createEventDispatcher } from 'svelte';
+	import { CheckOutline, CloseOutline } from 'flowbite-svelte-icons';
 
-	export let counterParameter: CounterParameters;
-
-	const dispatch = createEventDispatcher();
-
-	const changeScore = () => {
-		dispatch('changed', counterParameter.id);
-	};
+	let {
+		counterParameter = $bindable(), 
+		changed
+	}: {
+		counterParameter: CounterParameters, 
+		changed: (id: number) => void
+	} = $props();
 
 	const onCorrect = () => {
-		changeScore();
+		changed(counterParameter.id);
 
-		switch ($rule) {
+		switch (ruleSet.rule) {
 			case RuleType.mn:
 				counterParameter.correct++;
-				counterParameter.score += $whenCorrect;
+				counterParameter.score += ruleSet.whenCorrect;
 				break;
 			case RuleType.by:
 				counterParameter.correct++;
@@ -28,11 +27,11 @@
 				break;
 			case RuleType.divide:
 				counterParameter.correct++;
-				counterParameter.score += $inicialPoint;
+				counterParameter.score += ruleSet.inicialPoint;
 				break;
 			case RuleType.backstream:
 				counterParameter.correct++;
-				counterParameter.score += $whenCorrect;
+				counterParameter.score += ruleSet.whenCorrect;
 				break;
 			default:
 				throw new Error('undefined Rule');
@@ -40,12 +39,12 @@
 	};
 
 	const onIncorrect = () => {
-		changeScore();
+		changed(counterParameter.id);
 
-		switch ($rule) {
+		switch (ruleSet.rule) {
 			case RuleType.mn:
 				counterParameter.incorrect++;
-				counterParameter.score += $whenIncorrect;
+				counterParameter.score += ruleSet.whenIncorrect;
 				break;
 			case RuleType.by:
 				counterParameter.incorrect--;
@@ -57,7 +56,7 @@
 				break;
 			case RuleType.backstream:
 				counterParameter.incorrect++;
-				counterParameter.score += $whenIncorrect * counterParameter.incorrect;
+				counterParameter.score += ruleSet.whenIncorrect * counterParameter.incorrect;
 				break;
 			default:
 				throw new Error('undefined Rule');
@@ -71,7 +70,7 @@
 
 <div class="grid justify-items-center grid-rows-2 grid-flow-col">
 	<p class="text-4xl text-black dark:text-white">{counterParameter.correct}</p>
-	<Button color="red" on:click={onCorrect}><CheckSolid /></Button>
+	<Button color="red" onclick={onCorrect}><CheckOutline /></Button>
 	<p class="text-4xl text-black dark:text-white">{counterParameter.incorrect}</p>
-	<Button color="blue" on:click={onIncorrect}><CloseSolid /></Button>
+	<Button color="blue" onclick={onIncorrect}><CloseOutline /></Button>
 </div>

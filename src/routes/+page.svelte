@@ -3,12 +3,12 @@
 	import RuleSetting from '$lib/components/ruleSetting.svelte';
 	import type { CounterParameters } from '$lib/definitions/parameters';
 	import { RuleType } from '$lib/definitions/rules';
-	import { inicialPoint, nByMParameters, rule } from '$lib/store/store';
+	import { nByMParameters, ruleSet } from '$lib/state/state.svelte';
 	import { Button, Modal } from 'flowbite-svelte';
-	import { ArrowsRepeatSolid, GearSolid, PlusSolid, UndoOutline } from 'flowbite-svelte-icons';
+	import { ArrowsRepeatOutline, CogOutline, PlusOutline, UndoOutline } from 'flowbite-svelte-icons';
 	import { onMount } from 'svelte';
 
-  let counters: CounterParameters[] = new Array();
+  let counters: CounterParameters[] = $state(new Array());
 
 	onMount(() => {
 		addCard()
@@ -16,11 +16,11 @@
 	})
 
 	const inicialCard = (id: number): CounterParameters => {
-		switch ($rule) {
+		switch (ruleSet.rule) {
 			case RuleType.by:
-				return { id:id, score: 0, correct: 0, incorrect: $nByMParameters.m }
+				return { id:id, score: 0, correct: 0, incorrect: nByMParameters.m }
 			case RuleType.divide:
-				return { id:id, score: $inicialPoint, correct: 0, incorrect: 0 }
+				return { id:id, score: ruleSet.inicialPoint, correct: 0, incorrect: 0 }
 			default:
 				return { id:id, score: 0, correct: 0, incorrect: 0 }
 		}
@@ -30,16 +30,16 @@
 		counters = [...counters, inicialCard(counters.length + 1)]
 	}
 
-	const deleteCard = (event: CustomEvent) => {
-		counters = counters.filter((counter) => counter.id != event.detail)
+	const deleteCard = (id: number) => {
+		counters = counters.filter((counter) => counter.id != id)
 	}
 
-	let undoStack: CounterParameters[] = new Array()
+	let undoStack: CounterParameters[] = $state(new Array())
 
-	const pushUndoStack = (event: CustomEvent) => {
-		const changedCounter = counters.find((counters) => counters.id === event.detail)
+	const pushUndoStack = (id: number) => {
+		const changedCounter = counters.find((counters) => counters.id === id)
 		if (changedCounter) {
-			undoStack = [...undoStack, structuredClone(changedCounter)]	
+			undoStack = [...undoStack, $state.snapshot(changedCounter)]	
 		}
 	}
 
@@ -55,32 +55,32 @@
 		}
 	}
 
-	$: hasUndoStack = undoStack.length > 0;
+	const hasUndoStack = $derived(undoStack.length > 0);
 
 	const allReset = () => {
 		counters = counters.map((counter) => inicialCard(counter.id))
 		undoStack = []
 	}
 
-	let popupModal = false
+	let popupModal = $state(false)
 </script>
 
 <div class="container mx-auto">
 	<div class="flex justify-end align-middle gap-3 m-3">
-		<Button type="button" outline={true} color="dark" on:click={undo} disabled={!hasUndoStack} >
+		<Button type="button" outline={true} color="dark" onclick={undo} disabled={!hasUndoStack} >
 			<UndoOutline />
 		</Button>
-		<Button type="button" outline={true} color="dark" on:click={allReset} >
-			<ArrowsRepeatSolid />
+		<Button type="button" outline={true} color="dark" onclick={allReset} >
+			<ArrowsRepeatOutline />
 		</Button>
-		<button type="button" on:click={() => (popupModal = true)}><GearSolid /></button>
+		<button type="button" onclick={() => (popupModal = true)}><CogOutline /></button>
 	</div>
 
 	<div class="grid gap-5 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-		{#each counters as counter, index}
-			<CounterFrame bind:counterParameter={counter} order={index} on:changed={pushUndoStack} on:delete={deleteCard} />
+		{#each counters as _, index}
+			<CounterFrame bind:counterParameter={counters[index]} changed={(id) => pushUndoStack(id)} deleted={(id) => deleteCard(id)} />
 		{/each}
-		<Button color="dark" outline={true} on:click={addCard}><PlusSolid /></Button>
+		<Button color="dark" outline={true} onclick={addCard}><PlusOutline /></Button>
 	</div>
 </div>
 

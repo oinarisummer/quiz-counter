@@ -1,28 +1,27 @@
 <script lang="ts">
 	import type { CounterParameters } from '$lib/definitions/parameters';
 	import { RuleType } from '$lib/definitions/rules';
-	import { rule } from '$lib/store/store';
+	import { ruleSet } from '$lib/state/state.svelte';
 	import { Button } from 'flowbite-svelte';
-	import { CheckSolid, CloseSolid } from 'flowbite-svelte-icons';
-	import { createEventDispatcher } from 'svelte';
+	import { CheckOutline, CloseOutline } from 'flowbite-svelte-icons';
 
-	export let counterParameter: CounterParameters;
-
-	const dispatch = createEventDispatcher();
-
-	const changeScore = () => {
-		dispatch('changed', counterParameter.id);
-	};
+	let {
+		counterParameter = $bindable(), 
+		changed
+	}: {
+		counterParameter: CounterParameters, 
+		changed: (id: number) => void
+	} = $props();
 
 	const onCorrect = () => {
-		changeScore();
+		changed(counterParameter.id);
 		counterParameter.correct++;
 	};
 
 	const onIncorrect = () => {
-		changeScore();
+		changed(counterParameter.id);
 
-		switch ($rule) {
+		switch (ruleSet.rule) {
 			case RuleType.swedish:
 				counterParameter.incorrect += swedishNext;
 				break;
@@ -31,14 +30,14 @@
 		}
 	};
 
-	$: swedishNext = Math.ceil((-1 + Math.sqrt(1 + 8 * (counterParameter.correct + 1))) / 2);
+	const swedishNext = $derived(Math.ceil((-1 + Math.sqrt(1 + 8 * (counterParameter.correct + 1))) / 2));
 </script>
 
 <div class="grid justify-items-center grid-rows-2 grid-flow-col">
 	<p class="text-5xl text-black dark:text-white">{counterParameter.correct}</p>
-	<Button color="red" class="h-10" on:click={onCorrect}><CheckSolid /></Button>
+	<Button color="red" class="h-10" onclick={onCorrect}><CheckOutline /></Button>
 	<p class="text-5xl text-black dark:text-white">{counterParameter.incorrect}</p>
-	<Button color="blue" class="h-10" on:click={onIncorrect}><CloseSolid /></Button>
+	<Button color="blue" class="h-10" onclick={onIncorrect}><CloseOutline /></Button>
 </div>
 <div class="grid justify-items-center grid-cols-2">
 	<div></div>

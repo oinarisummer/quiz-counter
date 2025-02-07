@@ -1,33 +1,36 @@
 <script lang="ts">
 	import type { CounterParameters } from '$lib/definitions/parameters';
 	import { CounterType, RuleType, counterType } from '$lib/definitions/rules';
-	import { inicialPoint, nByMParameters, rule } from '$lib/store/store';
+	import { nByMParameters, ruleSet } from '$lib/state/state.svelte';
 	import { Card, CloseButton, Input } from 'flowbite-svelte';
-	import { ArrowsRepeatSolid } from 'flowbite-svelte-icons';
-	import { createEventDispatcher } from 'svelte';
+	import { ArrowsRepeatOutline } from 'flowbite-svelte-icons';
 	import ScoreCounter from './scoreCounter.svelte';
 	import SimpleCounter from './simpleCounter.svelte';
 	import SwedishCounter from './swedishCounter.svelte';
 
-	export let counterParameter: CounterParameters 
-
-	const dispatch = createEventDispatcher()
+	interface CounterFrameProps {
+		counterParameter: CounterParameters
+		deleted: (id: number) => void
+		changed: (id: number) => void
+	}
+	
+	let {counterParameter = $bindable(), deleted, changed}: CounterFrameProps = $props()
 
 	const deleteClick = () => {
-		dispatch('delete', counterParameter.id);
+		deleted(counterParameter.id);
 	}
 
 	export const reset = () => {
-		dispatch('changed', counterParameter.id)
+		changed(counterParameter.id)
 
-		switch ($rule) {
+		switch (ruleSet.rule) {
 			case RuleType.by:
 				counterParameter.score = 0;
 				counterParameter.correct = 0;
-				counterParameter.incorrect = $nByMParameters.m;
+				counterParameter.incorrect = nByMParameters.m;
 				break;
 			case RuleType.divide:
-				counterParameter.score = $inicialPoint;
+				counterParameter.score = ruleSet.inicialPoint;
 				counterParameter.correct = 0;
 				counterParameter.incorrect = 0;
 				break;
@@ -39,16 +42,16 @@
 	}
 
 	// HACK
-	$: counter =  counterType($rule) === CounterType.score ? ScoreCounter : counterType($rule) === CounterType.swedish ? SwedishCounter : SimpleCounter
+	const Counter = $derived(counterType(ruleSet.rule) === CounterType.score ? ScoreCounter : counterType(ruleSet.rule) === CounterType.swedish ? SwedishCounter : SimpleCounter)
 </script>
 
 <Card>
 	<div class="flex justify-end items-center gap-4">
-		<ArrowsRepeatSolid  on:click={reset} />
-		<CloseButton on:click={deleteClick} />
+		<ArrowsRepeatOutline onclick={reset} />
+		<CloseButton onclick={deleteClick} />
 	</div>
 
 	<Input bind:value={counterParameter.name} placeholder="Name?" class="text-2xl text-center m-2" />
 
-	<svelte:component this={counter} bind:counterParameter on:changed />
+	<Counter bind:counterParameter changed={(id) => changed(id)} />
 </Card>
