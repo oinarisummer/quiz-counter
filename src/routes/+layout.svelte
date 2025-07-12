@@ -1,27 +1,21 @@
-<script>
+<script lang="ts">
 	import { RuleType, ruleName } from '$lib/definitions/rules';
-	import {
-		nByMGoalScore,
-		nByMParameters,
-		rule,
-		whenCorrect,
-		whenIncorrect
-	} from '$lib/store/store';
-	import { derived } from 'svelte/store';
+	import { nByMGoalScore, nByMParameters, ruleSet } from '$lib/state/state.svelte';
+	import type { Snippet } from 'svelte';
 	import '../app.postcss';
 
-	const title = derived(
-		[rule, whenCorrect, whenIncorrect, nByMParameters, nByMGoalScore],
-		([$rule, $whenCorrect, $whenIncorrect, $nByMParameters, $nByMGoalScore]) => {
-			switch ($rule) {
+	let { children }: { children: Snippet } = $props();
+
+	const title = $derived.by(() => {
+			switch (ruleSet.rule) {
 				case RuleType.mn:
-					return `+${$whenCorrect}/${$whenIncorrect}`;
+					return `+${ruleSet.whenCorrect}/${ruleSet.whenIncorrect}`;
 				case RuleType.by:
-					return `${$nByMParameters.n} by ${$nByMParameters.m} (${$nByMGoalScore})`;
+					return `${nByMParameters.n} by ${nByMParameters.m} (${nByMGoalScore()})`;
 				case RuleType.backstream:
-					return $whenIncorrect == -1 ? 'Backstream -n' : `Backstream ${$whenIncorrect}n`;
+					return ruleSet.whenIncorrect == -1 ? 'Backstream -n' : `Backstream ${ruleSet.whenIncorrect}n`;
 				default:
-					return ruleName($rule);
+					return ruleName(ruleSet.rule);
 			}
 		}
 	);
@@ -29,6 +23,6 @@
 
 <title>Quiz Counter</title>
 <div class="flex justify-center align-middle mb-4 p-1" style="background-color:lightsteelblue;">
-	<h1 class="text-3xl">{$title}</h1>
+	<h1 class="text-3xl">{title}</h1>
 </div>
-<slot />
+{@render children()}
